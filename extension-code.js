@@ -11,12 +11,12 @@
           {
             opcode: 'initsdk',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'Initialize YaGames SDK'
+            text: 'установить YaGames SDK'
           },
           {
             opcode: 'setdebug',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'Enable debug mode'
+            text: 'Включить режим отладки'
           },
           {
             opcode: 'getsavedvar',
