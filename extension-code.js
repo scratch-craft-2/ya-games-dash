@@ -5,7 +5,7 @@
       console.log("Расширение Yandex games turbowarp созданно timaaos и scratch_craft_2 полный исходник используемого расширения: https://github.com/scratch-craft-2/ya-games-turbowarp/");
       return {
         id: 'yagames',
-        name: 'Яндекс игры SDK',
+        name: 'yandex games SDK',
         color1: '#4C1CBA',
         blocks: [
           {
