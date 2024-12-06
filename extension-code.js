@@ -82,43 +82,43 @@
             opcode: 'whenFullscreenClosed',
             blockType: Scratch.BlockType.HAT,
             func: 'isFullscreenClosed',
-            text: 'When fullscreen ad closed'
+            text: 'При закрытии рекламы'
           },
           {
             opcode: 'fullscreenClosed',
             blockType: Scratch.BlockType.BOOLEAN,
-            text: 'Is fullscreen ad closed?'
+            text: 'Закрыта ли реклама?'
           },
           {
             opcode: 'showrewarded',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'Show rewarded ad'
+            text: 'Показать рекламу с вознаграждением'
           },
           {
             opcode: 'whenRewardedWatched',
             blockType: Scratch.BlockType.HAT,
             func: 'isRewardedWatched',
-            text: 'When rewarded ad shown'
+            text: 'При показе рекламы с вознаграждением'
           },
           {
             opcode: 'rewardedRewarded',
             blockType: Scratch.BlockType.BOOLEAN,
-            text: 'Did Rewarded Ad give reward?'
+            text: 'Вознаграждение за рекламу получено?'
           },
           {
             opcode: 'canRateGame',
             blockType: Scratch.BlockType.BOOLEAN,
-            text: 'Can rate game?'
+            text: 'Можно оценить игру?'
           },
           {
             opcode: 'openRatePopup',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'Open Rating Popup'
+            text: 'Откройте всплывающее окно рейтинга'
           },
           {
             opcode: 'getDeviceType',
             blockType: Scratch.BlockType.REPORTER,
-            text: 'Device Type'
+            text: 'тип устройства'
           },
           {
             opcode: 'isDesktop',
