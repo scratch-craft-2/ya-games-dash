@@ -21,7 +21,7 @@
           {
             opcode: 'getsavedvar',
             blockType: Scratch.BlockType.REPORTER,
-            text: 'Get saved variable [NAME] default value [DEFVAL]',
+            text: 'Получить сохраненное значение переменной [NAME] по умолчанию [DEFVAL]',
             arguments: {
               NAME: {
                 defaultValue: 'money',
@@ -36,7 +36,7 @@
           {
             opcode: 'setsavedvar',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'Set saved variable [NAME] value [VALUE]',
+            text: 'Установить переменную [NAME] в значение [VALUE]',
             arguments: {
               NAME: {
                 defaultValue: 'money',
@@ -51,22 +51,22 @@
           {
             opcode: 'sdkenabled',
             blockType: Scratch.BlockType.BOOLEAN,
-            text: 'Is SDK Enabled'
+            text: 'SDK загружен?'
           },
           {
             opcode: 'dataloaded',
             blockType: Scratch.BlockType.BOOLEAN,
-            text: 'Is data loaded?'
+            text: 'Данные загружены?'
           },
           {
             opcode: 'savevars',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'Save progress'
+            text: 'Сохранить прогресс'
           },
           {
             opcode: 'loadvars',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'Load progress'
+            text: 'Загрузить прогресс'
           },
           {
             opcode: 'resetprogress',
