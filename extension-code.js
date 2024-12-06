@@ -140,11 +140,6 @@
             blockType: Scratch.BlockType.BOOLEAN,
             text: 'Игра открыта на телевизоре?'
           },
-          {
-            opcode: 'lang',
-            blockType: Scratch.BlockType.REPORTER,
-            text: 'Язык на котором открыта игра'
-          },
         ]
       };
     }
@@ -171,9 +166,6 @@
         return false;
       }
       return ysdk.deviceInfo.isTablet();
-    }
-    lang() {
-      return ysdk.environment.i18n.lang();
     }
     isTV() {
       if (window.ysdkdebug == true) {
