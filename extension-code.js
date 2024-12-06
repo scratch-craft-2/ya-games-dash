@@ -5,7 +5,7 @@
       console.log("Расширение Yandex games turbowarp созданно timaaos и scratch_craft_2 полный исходник используемого расширения:https://github.com/scratch-craft-2/ya-games-turbowarp/");
       return {
         id: 'yagames',
-        name: 'Yandex Games SDK',
+        name: 'Яндекс игры SDK',
         color1: '#4C1CBA',
         blocks: [
           {
@@ -71,12 +71,12 @@
           {
             opcode: 'resetprogress',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'Reset progress'
+            text: 'Сброс прогреса'
           },
           {
             opcode: 'showfullscreen',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'Show fullscreen ad'
+            text: 'Показать рекламу'
           },
           {
             opcode: 'whenFullscreenClosed',
@@ -123,22 +123,22 @@
           {
             opcode: 'isDesktop',
             blockType: Scratch.BlockType.BOOLEAN,
-            text: 'Is playing on Desktop?'
+            text: 'Игра открыта на десктопе?'
           },
           {
             opcode: 'isMobile',
             blockType: Scratch.BlockType.BOOLEAN,
-            text: 'Is playing on Mobile?'
+            text: 'Игра открыта на телефоне?'
           },
           {
             opcode: 'isTablet',
             blockType: Scratch.BlockType.BOOLEAN,
-            text: 'Is playing on Tablet?'
+            text: 'Игра открыта на планшете?'
           },
           {
             opcode: 'isTV',
             blockType: Scratch.BlockType.BOOLEAN,
-            text: 'Is playing on TV?'
+            text: 'Игра открыта на телевизоре?'
           },
         ]
       };
