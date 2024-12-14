@@ -18,6 +18,11 @@
             blockType: Scratch.BlockType.COMMAND,
             text: 'Включить режим отладки'
           },
+          {            
+            opcode: 'reporterlang',
+            blockType: Scratch.BlockType.REPORTER,
+            text: 'Язык на котором открыта игра (в разработке)',
+          },
           {
             opcode: 'getsavedvar',
             blockType: Scratch.BlockType.REPORTER,
@@ -166,6 +171,12 @@
         return false;
       }
       return ysdk.deviceInfo.isTablet();
+    }
+    reporterlang() {
+      if (window.ysdkdebug == true) {
+        return err;
+      }
+      return ysdk.environment.i18n.lang();
     }
     isTV() {
       if (window.ysdkdebug == true) {
