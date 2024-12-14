@@ -173,9 +173,6 @@
       return ysdk.deviceInfo.isTablet();
     }
     reporterlang() {
-      if (window.ysdkdebug == true) {
-        return err;
-      }
       return window.ysdk.environment.i18n.lang();
     }
     isTV() {
