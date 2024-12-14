@@ -176,7 +176,7 @@
       if (window.ysdkdebug == true) {
         return err;
       }
-      return ysdk.environment.i18n.lang();
+      return window.ysdk.environment.i18n.lang();
     }
     isTV() {
       if (window.ysdkdebug == true) {
