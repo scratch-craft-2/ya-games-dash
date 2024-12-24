@@ -346,7 +346,6 @@ setLeaderboardScore(
   leaderboardName: [args.leaderboardName],
   score: [args.score],
 ) }
-    }
     resetprogress() {
       window.ysdkdata = {};
       if (window.ysdkplayer != undefined && window.ysdkdata != undefined && window.savedData !== JSON.stringify(window.ysdkdata))
@@ -372,7 +371,7 @@ setLeaderboardScore(
       window.isAdOpened = true;
       Scratch.vm.runtime.audioEngine.inputNode.gain.value = 0;
       if (window.ysdkdebug == true) {
-        alert("Fullscreen ad!");
+        alert("Показ рекламы");
         window.isfullscreenclosed = true;
         Scratch.vm.runtime.audioEngine.inputNode.gain.value = 1;
         window.triggerIFC = true;
