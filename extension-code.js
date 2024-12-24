@@ -83,7 +83,7 @@
             blockType: Scratch.BlockType.COMMAND,
             text: 'Вызвать окно авторизации яндекса'
           },
-      {
+        {
             opcode: 'leaderboard',
             blockType: Scratch.BlockType.COMMAND,
             text: ' установить очки игрока в лидерборде[leaderboardName] в значение [score]',
@@ -261,7 +261,7 @@ ysdk.getLeaderboards()
   .then(_lb => lb = _lb);}
 
     login() {
-ysdk.auth.openAuthDialog() 
+ysdk.auth.openAuthDialog();
     }
 
         initsdk() {
