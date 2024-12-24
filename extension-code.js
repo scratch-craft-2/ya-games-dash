@@ -74,6 +74,31 @@
             text: 'Загрузить прогресс'
           },
           {
+            opcode: 'loadID',
+            blockType: Scratch.BlockType.COMMAND,
+            text: 'Загрузить lb'
+          },
+          {
+            opcode: 'login',
+            blockType: Scratch.BlockType.COMMAND,
+            text: 'Вызвать окно авторизации яндекса'
+          },
+      {
+            opcode: 'leaderboard',
+            blockType: Scratch.BlockType.COMMAND,
+            text: ' установить очки игрока в лидерборде[leaderboardName] в значение [score]',
+            arguments: {
+              leaderboardName: {
+                defaultValue: 'leaderboardName',
+                type: Scratch.ArgumentType.STRING
+              },
+               score: {
+                defaultValue: '100',
+                type: Scratch.ArgumentType.STRING
+              }
+            }
+          },
+          {
             opcode: 'resetprogress',
             blockType: Scratch.BlockType.COMMAND,
             text: 'Сброс прогреса'
@@ -228,7 +253,17 @@
     }
     fullscreenClosed() {
       return (window.isfullscreenclosed == true);
+    }    
+    
+      loadID() { 
+var lb;
+ysdk.getLeaderboards()
+  .then(_lb => lb = _lb);}
+
+    login() {
+ysdk.auth.openAuthDialog() 
     }
+
         initsdk() {
       function onBlur() {
         if(window.isAdOpened == false){
@@ -305,6 +340,12 @@
           window.savedData = JSON.stringify(window.ysdkdata);
           console.log("Successfully saved data!");
         });
+    }
+    leaderboard() {
+setLeaderboardScore(
+  leaderboardName: [args.leaderboardName],
+  score: [args.score],
+) }
     }
     resetprogress() {
       window.ysdkdata = {};
