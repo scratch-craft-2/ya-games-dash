@@ -3,7 +3,7 @@
   class YaGamesSDKExtension {
     getInfo() {
       console.log(
-        "Расширение Yandex Games TurboWarp созданно timaaos и scratch_craft_2\NПолный исходник используемого расширения: https://github.com/scratch-craft-2/ya-games-turbowarp/",
+        "Расширение Yandex Games TurboWarp созданно timaaos, scratch_craft_2 и Den4ik-12\Полный исходник используемого расширения: https://github.com/scratch-craft-2/ya-games-turbowarp/",
       );
       return {
         id: "yagames",
