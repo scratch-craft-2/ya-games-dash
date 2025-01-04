@@ -88,7 +88,7 @@
           {
             opcode: "leaderboard",
             blockType: Scratch.BlockType.COMMAND,
-            text: "Установить очки игрока в лидерборде [leaderboardName] в значение [score]",
+            text: "Установить очки игрока в лидерборде [arguments[0]] в значение [arguments[1]]",
             arguments: {
               leaderboardName: {
                 defaultValue: "leaderboardName",
