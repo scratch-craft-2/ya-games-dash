@@ -3,7 +3,7 @@
     class YaGamesSDKExtension {
       getInfo() {
         console.log(
-          "Расширение Yandex Games TurboWarp созданно timaaos, scratch_craft_2, Den4ik-12 и DBDev\nПолный исходник используемого расширения: https://github.com/scratch-craft-2/ya-games-turbowarp/ или https://github.com/DBDev-git/ya-games-turbowarp/",
+          "Расширение Yandex Games TurboWarp созданно timaaos, scratch_craft_2, Den4ik-12 и DBDev\nПолный исходник используемого расширения: https://github.com/scratch-craft-2/ya-games-turbowarp/",
         );
         return {
           id: "yagames",
@@ -13,12 +13,12 @@
             {
               opcode: "initsdk",
               blockType: Scratch.BlockType.COMMAND,
-              text: "Установить YaGames SDK",
+              text: "Загрузить YaGames SDK",
             },
             {
               opcode: "setdebug",
               blockType: Scratch.BlockType.COMMAND,
-              text: "Включить режим отладки",
+              text: "Включить дебаг режим",
             },
             {
               opcode: "reporterlang",
@@ -211,6 +211,9 @@
         return ysdk.deviceInfo.isTablet();
       }
       reporterlang() {
+        if (window.ysdkdebug == true) {
+          return "ru";
+        }
         return ysdk.environment.i18n.lang;
       }
       isTV() {
@@ -232,13 +235,13 @@
       openRatePopup() {
         if (window.ysdkdebug == true) {
           window.alreadyrated = true;
-          alert("DEBUG Rate our game");
+          alert("ДЕБАГ Оцените нашу игру");
           return;
         }
         ysdk.feedback.requestReview();
       }
       whenRewardedWatched() {
-        console.log("watched!");
+        console.log("Просмотрено!");
       }
       rewardedRewarded() {
         return window.isrewarded == true;
@@ -268,6 +271,7 @@
         return window.isfullscreenclosed == true;
       }
       async loadID(args) {
+      if (window.ysdkdebug != true) {
         const lb = await ysdk.getLeaderboards();
         try {
           const res = await lb.getLeaderboardPlayerEntry(args.NAME);
@@ -279,8 +283,12 @@
             return null;
           }
         }
+      } else {
+        return "Работает только в Яндексе";
+      }
       }
       async alreadyLogin() {
+      if (window.ysdkdebug != true) {
         try {
           const player = await ysdk.getPlayer();
           if (player.getMode() === 'lite') {
@@ -292,8 +300,12 @@
           console.error('Ошибка при получении игрока: ', err);
           return false;
         }
+      } else {
+        return true;
+      }
       }
       login() {
+      if (window.ysdkdebug != true) {
         var player;
         function initPlayer() {
           return ysdk.getPlayer().then(_player => {
@@ -311,6 +323,9 @@
         }).catch(err => {
           console.log(err)
         });
+      } else {
+        alert("ДЕБАГ Войдите в аккаунт")
+      }
       }
       initsdk() {
         function onBlur() {
@@ -388,6 +403,7 @@
         return window.ysdkdata[args.NAME] || args.DEFVAL;
       }
       savevars() {
+      if (window.ysdkdebug != true) {
         if (
           window.ysdkplayer != undefined &&
           window.ysdkdata != undefined &&
@@ -398,15 +414,19 @@
             console.log("Successfully saved data!");
           });
       }
+      }
       async leaderboard(args) {
+      if (window.ysdk != true) {
         await ysdk.getLeaderboards()
           .then(lb => {
             lb.setLeaderboardScore(args.NAME, args.SCORE);
             console.log("Сохранены данные в лидерборд")
           });
       }
+      }
       resetprogress() {
         window.ysdkdata = {};
+      if (window.ysdkdebug != true) {
         if (
           window.ysdkplayer != undefined &&
           window.ysdkdata != undefined &&
@@ -416,6 +436,7 @@
             window.savedData = JSON.stringify(window.ysdkdata);
             console.log("Successfully saved data!");
           });
+      }
       }
       sdkenabled() {
         return window.ysdk != undefined;
