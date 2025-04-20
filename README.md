@@ -19,4 +19,4 @@
  alt="IMAGE" width="200"/>
 7. Жмём, выбираем Text, ставим галочку загрузки "Run extension without sandbox" и вставляем скопированный код в поле.
 8. Жмём Load и начинаем пользоваться!
-9. Подписаться на [Программируй](https://t.me/creative_programmer) и [Let's create|DBDev](https://t.me/DBDev_IT_channel)
+9. Подписаться на [Программируй](https://t.me/creative_programmer)
