@@ -9,7 +9,7 @@
  + Это бесплатно (поэтому пункт 9)
 
 ## Как начать использовать?
-1. Заходим по [ссылке](https://raw.githubusercontent.com/NewEngineSystem/Yandex-Games-SDK-Scratch/main/plugin.js) и копируем код
+1. Заходим по [ссылке](https://github.com/scratch-craft-2/ya-games-turbowarp/blob/5e21ae9937b031302ef12eee8ebf78bdbe15089d/extension-code.js) и копируем код
 2. Заходим в [TurboWarp](https://turbowarp.org/editor)
 3. Жмём эту кнопку:
 4. <img src="https://raw.githubusercontent.com/NewEngineSystem/Yandex-Games-SDK-Scratch/main/extension%2B.png" 
