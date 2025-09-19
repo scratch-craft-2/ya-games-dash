@@ -26,54 +26,29 @@
               text: "Язык на котором открыта игра",
             },
             {
-              opcode: "getsavedvar",
-              blockType: Scratch.BlockType.REPORTER,
-              text: "Получить сохраненное значение переменной [NAME] по умолчанию [DEFVAL]",
+              opcode: "setdata",
+              blockType: Scratch.BlockType.COMMAND,
+              text: "Сохранить прогресс пользователя| мгновенное сохранение: [FLASH] | Сохранение прогресса (вставьте json array): [DATA]",
               arguments: {
-                NAME: {
-                  defaultValue: "money",
-                  type: Scratch.ArgumentType.STRING,
+                FLASH: {
+                  defaultValue: "false",
+                  type: Scratch.ArgumentType.BOOLEAN,
                 },
-                DEFVAL: {
+                DATA: {
                   defaultValue: "100",
                   type: Scratch.ArgumentType.STRING,
                 },
               },
             },
             {
-              opcode: "setsavedvar",
-              blockType: Scratch.BlockType.COMMAND,
-              text: "Установить переменную [NAME] в значение [VALUE]",
-              arguments: {
-                NAME: {
-                  defaultValue: "money",
-                  type: Scratch.ArgumentType.STRING,
-                },
-                VALUE: {
-                  defaultValue: "100",
-                  type: Scratch.ArgumentType.STRING,
-                },
-              },
-            },
+              opcode: "getdata",
+              blockType: Scratch.BlockType.REPORTER,
+              text: "Прогресс пользователя",
+            }
             {
               opcode: "sdkenabled",
               blockType: Scratch.BlockType.BOOLEAN,
               text: "SDK загружен?",
-            },
-            {
-              opcode: "dataloaded",
-              blockType: Scratch.BlockType.BOOLEAN,
-              text: "Данные загружены?",
-            },
-            {
-              opcode: "savevars",
-              blockType: Scratch.BlockType.COMMAND,
-              text: "Сохранить прогресс",
-            },
-            {
-              opcode: "loadvars",
-              blockType: Scratch.BlockType.COMMAND,
-              text: "Загрузить прогресс",
             },
             {
               opcode: "loadID",
@@ -395,46 +370,12 @@
         window.alreadyrated = false;
         window.ysdkdebug = true;
       }
-      setsavedvar(args) {
-        window.ysdkdata[args.NAME] = args.VALUE;
-        return;
-      }
-      getsavedvar(args) {
-        return window.ysdkdata[args.NAME] || args.DEFVAL;
-      }
-      savevars() {
-      if (window.ysdkdebug != true) {
-        if (
-          window.ysdkplayer != undefined &&
-          window.ysdkdata != undefined &&
-          window.savedData !== JSON.stringify(window.ysdkdata)
-        )
-          window.ysdkplayer.setData(window.ysdkdata, true).then(() => {
-            window.savedData = JSON.stringify(window.ysdkdata);
-            console.log("Successfully saved data!");
-          });
-      }
-      }
       async leaderboard(args) {
       if (window.ysdk != true) {
         await ysdk.getLeaderboards()
           .then(lb => {
             lb.setLeaderboardScore(args.NAME, args.SCORE);
             console.log("Сохранены данные в лидерборд")
-          });
-      }
-      }
-      resetprogress() {
-        window.ysdkdata = {};
-      if (window.ysdkdebug != true) {
-        if (
-          window.ysdkplayer != undefined &&
-          window.ysdkdata != undefined &&
-          window.savedData !== JSON.stringify(window.ysdkdata)
-        )
-          window.ysdkplayer.setData(window.ysdkdata, true).then(() => {
-            window.savedData = JSON.stringify(window.ysdkdata);
-            console.log("Successfully saved data!");
           });
       }
       }
@@ -500,6 +441,38 @@
           this.triggerIRW();
           return;
         }
+
+setdata() {
+function initPlayer() {
+    return ysdk.getPlayer().then(_player => {
+            return _player;
+        });
+}
+
+initPlayer().then(_player => {
+        if (_player.isAuthorized() === false) {
+            console.log("Игрок не авторизован")
+                    };
+        
+        if (_player.isAuthorized() === true) {
+_player.setData(
+    { data: [args.DATA] },
+    [args.FLASH]
+).then(() => {
+    console.log('data is set');
+})}
+}}
+
+getdata(){
+function initPlayer() {
+    return ysdk.getPlayer().then(_player => {
+            return _player;
+        });
+}
+return _player.getData(data)
+}
+
+
         window.ysdk.adv.showRewardedVideo({
           callbacks: {
             onOpen: () => {
@@ -528,3 +501,4 @@
     }
     Scratch.extensions.register(new YaGamesSDKExtension());
   })(Scratch);
+
