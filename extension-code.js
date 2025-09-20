@@ -36,7 +36,7 @@
                 },
                 DATA: {
                   defaultValue: "100",
-                  type: Scratch.ArgumentType.OBJECT,
+                  type: Scratch.ArgumentType.STRING,
                 },
               },
             },
@@ -534,6 +534,7 @@ return _player.getData([args.KEY]) }
     }
     Scratch.extensions.register(new YaGamesSDKExtension());
   })(Scratch);
+
 
 
 
