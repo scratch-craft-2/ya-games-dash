@@ -56,6 +56,11 @@
               text: "SDK загружен?",
             },
             {
+              opcode: "getservertime",
+              blockType: Scratch.BlockType.REPORTER,
+              text: "Получить серверное время",
+            },
+            {
               opcode: "loadID",
               blockType: Scratch.BlockType.REPORTER,
               text: "Загрузить очки игрока из лидерборда с именем [NAME]",
@@ -166,6 +171,11 @@
           ],
         };
       }
+      getservertime() {
+YaGames.init().then(ysdk => {
+    return ysdk.serverTime();
+});
+}
       getDeviceType() {
         if (window.ysdkdebug == true) {
           return "desktop";
@@ -502,5 +512,6 @@ return _player.getData([args.KEY]) }
     }
     Scratch.extensions.register(new YaGamesSDKExtension());
   })(Scratch);
+
 
 
