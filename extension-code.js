@@ -28,7 +28,7 @@
             {
               opcode: "setdata",
               blockType: Scratch.BlockType.COMMAND,
-              text: "Сохранить прогресс пользователя| мгновенное сохранение: [FLASH] | Сохранение прогресса (вставьте json array): [DATA]",
+              text: "Сохранить прогресс пользователя| мгновенное сохранение: [FLASH] | Сохранение прогресса (вставьте json object): [DATA]",
               arguments: {
                 FLASH: {
                   defaultValue: "false",
@@ -36,15 +36,20 @@
                 },
                 DATA: {
                   defaultValue: "100",
-                  type: Scratch.ArgumentType.STRING,
+                  type: Scratch.ArgumentType.OBJECT,
                 },
               },
             },
             {
               opcode: "getdata",
               blockType: Scratch.BlockType.REPORTER,
-              text: "Прогресс пользователя",
-            }
+              text: "Получить значение сохранения по ключу [KEY] (если не указано вернется все сохранение)" ,
+              arguments: {
+                 KEY: {
+                  defaultValue: "Var1",
+                  type: Scratch.ArgumentType.STRING,
+                }            
+              }
             {
               opcode: "sdkenabled",
               blockType: Scratch.BlockType.BOOLEAN,
@@ -456,7 +461,7 @@ initPlayer().then(_player => {
         
         if (_player.isAuthorized() === true) {
 _player.setData(
-    { data: [args.DATA] },
+    {[args.DATA]},
     [args.FLASH]
 ).then(() => {
     console.log('data is set');
@@ -464,12 +469,8 @@ _player.setData(
 }}
 
 getdata(){
-function initPlayer() {
-    return ysdk.getPlayer().then(_player => {
-            return _player;
-        });
-}
-return _player.getData(data)
+ysdk.getPlayer().then(_player => {
+return _player.getData([args.KEY]) }
 }
 
 
@@ -501,4 +502,5 @@ return _player.getData(data)
     }
     Scratch.extensions.register(new YaGamesSDKExtension());
   })(Scratch);
+
 
