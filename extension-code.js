@@ -72,6 +72,25 @@
               },
             },
             {
+              opcode: "Getliaders",
+              blockType: Scratch.BlockType.REPORTER,
+              text: "Получить лидеров лидерборда [NAME] кол-во около (снизу и сверху) пользователя (до 10): [AROUND] лидеры лидерборда (до 20): [TOP]",
+              arguments: {
+                NAME: {
+                    defaultValue: "Имя лидерборда",
+                    type: Scratch.ArgumentType.STRING,
+                },
+                AROUND: {
+                    defaultValue: "5",
+                    type: Scratch.ArgumentType.NUMBER,
+                },
+                TOP: {
+                    defaultValue: "5",
+                    type: Scratch.ArgumentType.NUMBER,
+                },
+              },
+            },
+            {
               opcode: "alreadyLogin",
               blockType: Scratch.BlockType.BOOLEAN,
               text: "Вошёл ли игрок в аккаунт Яндекса?"
@@ -232,6 +251,9 @@ YaGames.init().then(ysdk => {
       }
       whenRewardedWatched() {
         console.log("Просмотрено!");
+      }
+      Getliaders() {
+       return ysdk.leaderboards.getEntries([args.NAME], { quantityTop: [args.TOP], includeUser: true, quantityAround: [args.AROUND]})
       }
       rewardedRewarded() {
         return window.isrewarded == true;
@@ -512,6 +534,7 @@ return _player.getData([args.KEY]) }
     }
     Scratch.extensions.register(new YaGamesSDKExtension());
   })(Scratch);
+
 
 
 
