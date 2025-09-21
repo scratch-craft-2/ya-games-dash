@@ -1,41 +1,65 @@
 (function (Scratch) {
     "use strict";
+  
+    if (!Scratch.extensions.unsandboxed) {
+      throw new Error(
+        "Yandex Games SDK:\nThis extension must run unsandboxed!\nPlease enable the unsandboxed mode when loading the extension."
+      );
+    }
+  
     class YaGamesSDKExtension {
-      getInfo() {
+      constructor() {
         console.log(
-          "Расширение Yandex Games TurboWarp созданно timaaos, scratch_craft_2, Den4ik-12 и DBDev",
+          "Yandex Games SDK:\nThis extension created by timaaos, scratch_craft_2, Den4ik-12 and DBDev",
         );
+        this.debug = false;
+        this.alreadyRated = false;
+        this.logged = false;
+        this.isAdOpened = false;
+      }
+      getInfo() {
         return {
           id: "yagames",
-          name: "Яндекс Игры SDK",
+          name: "Yandex Games SDK",
           color1: "#4C1CBA",
           blocks: [
             {
               opcode: "initsdk",
               blockType: Scratch.BlockType.COMMAND,
-              text: "Загрузить YaGames SDK",
+              text: "initialize SDK",
             },
             {
               opcode: "setdebug",
               blockType: Scratch.BlockType.COMMAND,
-              text: "Включить дебаг режим",
+              text: "enable debug mode",
             },
+            {
+              opcode: "sdkenabled",
+              blockType: Scratch.BlockType.BOOLEAN,
+              text: "SDK initialized?",
+            },
+            "---",
             {
               opcode: "reporterlang",
               blockType: Scratch.BlockType.REPORTER,
-              text: "Язык на котором открыта игра",
+              text: "game language",
             },
+            {
+              opcode: "getservertime",
+              blockType: Scratch.BlockType.REPORTER,
+              text: "server time",
+            },
+            "---",
             {
               opcode: "setdata",
               blockType: Scratch.BlockType.COMMAND,
-              text: "Сохранить прогресс пользователя| мгновенное сохранение: [FLASH] | Сохранение прогресса (вставьте json object): [DATA]",
+              text: "save user progress: [DATA] with instant saving [FLASH]",
               arguments: {
                 FLASH: {
-                  defaultValue: "false",
                   type: Scratch.ArgumentType.BOOLEAN,
                 },
                 DATA: {
-                  defaultValue: "100",
+                  defaultValue: '{"key": "value"}',
                   type: Scratch.ArgumentType.STRING,
                 },
               },
@@ -43,30 +67,37 @@
             {
               opcode: "getdata",
               blockType: Scratch.BlockType.REPORTER,
-              text: "Получить значение сохранения по ключу [KEY] (если не указано вернется все сохранение)" ,
+              text: "item of key [KEY] in save (no key = all save)" ,
               arguments: {
                  KEY: {
-                  defaultValue: "Var1",
+                  defaultValue: "key",
                   type: Scratch.ArgumentType.STRING,
                 }            
               }
-            {
-              opcode: "sdkenabled",
-              blockType: Scratch.BlockType.BOOLEAN,
-              text: "SDK загружен?",
             },
+            "---",
             {
-              opcode: "getservertime",
-              blockType: Scratch.BlockType.REPORTER,
-              text: "Получить серверное время",
+              opcode: "leaderboard",
+              blockType: Scratch.BlockType.COMMAND,
+              text: "set user score [SCORE] in leaderboard with name [NAME]",
+              arguments: {
+                NAME: {
+                  defaultValue: "leaderboard",
+                  type: Scratch.ArgumentType.STRING,
+                },
+                SCORE: {
+                  defaultValue: "100",
+                  type: Scratch.ArgumentType.NUMBER,
+                },
+              },
             },
             {
               opcode: "loadID",
               blockType: Scratch.BlockType.REPORTER,
-              text: "Загрузить очки игрока из лидерборда с именем [NAME]",
+              text: "user score from leaderboard with name [NAME]",
               arguments: {
                 NAME: {
-                    defaultValue: "Имя лидерборда",
+                    defaultValue: "leaderboard",
                     type: Scratch.ArgumentType.STRING,
                 },
               },
@@ -74,10 +105,10 @@
             {
               opcode: "Getliaders",
               blockType: Scratch.BlockType.REPORTER,
-              text: "Получить лидеров лидерборда [NAME] кол-во около (снизу и сверху) пользователя (до 10): [AROUND] лидеры лидерборда (до 20): [TOP]",
+              text: "leaders of leaderbord with name: [NAME] number of leaders around user (1-10): [AROUND] number of top leaders (1-20): [TOP]",
               arguments: {
                 NAME: {
-                    defaultValue: "Имя лидерборда",
+                    defaultValue: "leaderboard",
                     type: Scratch.ArgumentType.STRING,
                 },
                 AROUND: {
@@ -91,170 +122,158 @@
               },
             },
             {
+              opcode: "resetprogress",
+              blockType: Scratch.BlockType.COMMAND,
+              text: "reset progress",
+            },
+            "---",
+            {
               opcode: "alreadyLogin",
               blockType: Scratch.BlockType.BOOLEAN,
-              text: "Вошёл ли игрок в аккаунт Яндекса?"
+              text: "user logged into Yandex account?"
             },
             {
               opcode: "login",
               blockType: Scratch.BlockType.COMMAND,
-              text: "Вызвать окно авторизации Яндекса",
+              text: "show authorization window",
             },
-            {
-              opcode: "leaderboard",
-              blockType: Scratch.BlockType.COMMAND,
-              text: "Установить очки игрока в лидерборде [NAME] в значение [SCORE]",
-              arguments: {
-                NAME: {
-                  defaultValue: "Имя лидерборда",
-                  type: Scratch.ArgumentType.STRING,
-                },
-                SCORE: {
-                  defaultValue: "100",
-                  type: Scratch.ArgumentType.NUMBER,
-                },
-              },
-            },
-            {
-              opcode: "resetprogress",
-              blockType: Scratch.BlockType.COMMAND,
-              text: "Сброс прогреса",
-            },
+            "---",
             {
               opcode: "showfullscreen",
               blockType: Scratch.BlockType.COMMAND,
-              text: "Показать рекламу",
+              text: "show ad",
             },
             {
               opcode: "whenFullscreenClosed",
               blockType: Scratch.BlockType.HAT,
               func: "isFullscreenClosed",
-              text: "При закрытии рекламы",
+              text: "when ad closed",
             },
             {
               opcode: "fullscreenClosed",
               blockType: Scratch.BlockType.BOOLEAN,
-              text: "Закрыта ли реклама?",
+              text: "ad closed?",
             },
             {
               opcode: "showrewarded",
               blockType: Scratch.BlockType.COMMAND,
-              text: "Показать рекламу с вознаграждением",
+              text: "show reward ad",
             },
             {
               opcode: "whenRewardedWatched",
               blockType: Scratch.BlockType.HAT,
               func: "isRewardedWatched",
-              text: "При показе рекламы с вознаграждением",
+              text: "when reward for ad to be received",
             },
             {
               opcode: "rewardedRewarded",
               blockType: Scratch.BlockType.BOOLEAN,
-              text: "Вознаграждение за рекламу получено?",
+              text: "reward for ad to be received?",
             },
+            "---",
             {
               opcode: "canRateGame",
               blockType: Scratch.BlockType.BOOLEAN,
-              text: "Можно оценить игру?",
+              text: "can rate game?",
             },
             {
               opcode: "openRatePopup",
               blockType: Scratch.BlockType.COMMAND,
-              text: "Откройте всплывающее окно рейтинга",
+              text: "show rate popup",
             },
+            "---",
             {
               opcode: "getDeviceType",
               blockType: Scratch.BlockType.REPORTER,
-              text: "Тип устройства",
+              text: "device type",
             },
             {
               opcode: "isDesktop",
               blockType: Scratch.BlockType.BOOLEAN,
-              text: "Игра открыта на десктопе?",
+              text: "device type = desktop?",
             },
             {
               opcode: "isMobile",
               blockType: Scratch.BlockType.BOOLEAN,
-              text: "Игра открыта на телефоне?",
+              text: "device type = mobile?",
             },
             {
               opcode: "isTablet",
               blockType: Scratch.BlockType.BOOLEAN,
-              text: "Игра открыта на планшете?",
+              text: "device type = tablet?",
             },
             {
               opcode: "isTV",
               blockType: Scratch.BlockType.BOOLEAN,
-              text: "Игра открыта на телевизоре?",
+              text: "device type = TV?",
             },
           ],
         };
       }
       getservertime() {
-YaGames.init().then(ysdk => {
-    return ysdk.serverTime();
-});
-}
+        if (!this.ysdk) return "";
+        return this.ysdk.serverTime();
+      }
       getDeviceType() {
-        if (window.ysdkdebug == true) {
-          return "desktop";
-        }
-        return ysdk.deviceInfo.type;
+        if (this.debug) return "desktop";
+        if (!this.ysdk) return "";
+        return this.ysdk.deviceInfo.type;
       }
       isDesktop() {
-        if (window.ysdkdebug == true) {
-          return true;
-        }
-        return ysdk.deviceInfo.isDesktop();
+        if (this.debug) return true;
+        if (!this.ysdk) return false;
+        return this.ysdk.deviceInfo.isDesktop();
       }
       isMobile() {
-        if (window.ysdkdebug == true) {
-          return false;
-        }
-        return ysdk.deviceInfo.isMobile();
+        if (this.debug) return false;
+        if (!this.ysdk) return false;
+        return this.ysdk.deviceInfo.isMobile();
       }
       isTablet() {
-        if (window.ysdkdebug == true) {
-          return false;
-        }
-        return ysdk.deviceInfo.isTablet();
+        if (this.debug) return false;
+        if (!this.ysdk) return false;
+        return this.ysdk.deviceInfo.isTablet();
       }
       reporterlang() {
-        if (window.ysdkdebug == true) {
-          return "ru";
-        }
-        return ysdk.environment.i18n.lang;
+        if (this.debug) return "en";
+        if (!this.ysdk) return "";
+        return this.ysdk.environment.i18n.lang;
       }
       isTV() {
-        if (window.ysdkdebug == true) {
-          return false;
-        }
-        return ysdk.deviceInfo.isTV();
+        if (this.debug) return false;
+        if (!this.ysdk) return false;
+        return this.ysdk.deviceInfo.isTV();
       }
       canRateGame() {
-        if (window.ysdkdebug == true) {
-          return !(window.alreadyrated == true);
-        }
+        if (this.debug) return !this.alreadyRated;
+        if (!this.ysdk) return false;
         var can;
-        ysdk.feedback.canReview().then(({ value, reason }) => {
+        this.ysdk.feedback.canReview().then(({ value, reason }) => {
           can = value;
         });
         return can;
       }
       openRatePopup() {
-        if (window.ysdkdebug == true) {
-          window.alreadyrated = true;
-          alert("ДЕБАГ Оцените нашу игру");
+        if (this.debug) {
+          this.alreadyRated = true;
+          alert("Debug mode: Rate our game");
           return;
         }
-        ysdk.feedback.requestReview();
+        if (!this.ysdk) return;
+        this.ysdk.feedback.requestReview();
       }
       whenRewardedWatched() {
-        console.log("Просмотрено!");
+        console.log("Yandex Games SDK:\nReward ad watched!");
       }
-      Getliaders() {
-       return ysdk.leaderboards.getEntries([args.NAME], { quantityTop: [args.TOP], includeUser: true, quantityAround: [args.AROUND]})
+      Getliaders(args) {
+        if (!this.ysdk) return "";
+        const name = Scratch.Cast.toString(args.NAME);
+        const top = Scratch.Cast.toNumber(args.TOP);
+        const around = Scratch.Cast.toNumber(args.AROUND);
+        return this.ysdk.leaderboards.getEntries(name, { quantityTop: top, includeUser: true, quantityAround: around});
       }
+
+      // Rewrite -->
       rewardedRewarded() {
         return window.isrewarded == true;
       }
@@ -283,80 +302,66 @@ YaGames.init().then(ysdk => {
         return window.isfullscreenclosed == true;
       }
       async loadID(args) {
-      if (window.ysdkdebug != true) {
-        const lb = await ysdk.getLeaderboards();
+        if (this.debug) return "";
+        if (!this.ysdk) return "";
+        const name = Scratch.Cast.toString(args.NAME);
+        const lb = await this.ysdk.getLeaderboards();
         try {
-          const res = await lb.getLeaderboardPlayerEntry(args.NAME);
+          const res = await lb.getLeaderboardPlayerEntry(name);
           console.log(res);
           return res.score;
         } catch (err) {
           if (err.code === 'LEADERBOARD_PLAYER_NOT_PRESENT') {
-            console.log(err)
-            return null;
+            console.error("Yandex Games SDK:\nUser score getting error: ", err);
+            return "";
           }
         }
-      } else {
-        return "Работает только в Яндексе";
-      }
       }
       async alreadyLogin() {
-      if (window.ysdkdebug != true) {
+        if (this.debug) return this.logged;
+        if (!this.ysdk) return false;
         try {
-          const player = await ysdk.getPlayer();
-          if (player.getMode() === 'lite') {
-            return false;
-          } else {
-            return true;
-          }
+          const player = await this.ysdk.getPlayer();
+          return player.getMode() == "lite";
         } catch (err) {
-          console.error('Ошибка при получении игрока: ', err);
+          console.error("Yandex Games SDK:\nUser logged into account getting error: ", err);
           return false;
         }
-      } else {
-        return true;
-      }
       }
       login() {
-      if (window.ysdkdebug != true) {
-        var player;
-        function initPlayer() {
-          return ysdk.getPlayer().then(_player => {
-                  player = _player;
-                  return player;
-              });
+        if (this.debug) {
+          this.logged = confirm("Debug mode: Login in account");
+          return;
         }
-        initPlayer().then(_player => {
-          ysdk.auth.openAuthDialog().then(() => {
-            console.log("Успешно авторизовано")
-            initPlayer().catch(err => {
-              console.log(err)
-            });
+        if (!this.ysdk) return;
+        function initPlayer() {
+          return this.ysdk.getPlayer().then(player => {
+            return player;
+          });
+        }
+        initPlayer().then(() => {
+          this.ysdk.auth.openAuthDialog().then(() => {
+            console.log("Yandex Games SDK:\nSuccessfully authorized!");
           }).catch(() => {});
         }).catch(err => {
-          console.log(err)
+          console.error("Yandex Games SDK:\nShowing authorization window error: ", err);
         });
-      } else {
-        alert("ДЕБАГ Войдите в аккаунт")
-      }
       }
       initsdk() {
-        function onBlur() {
-          if (window.isAdOpened == false) {
-            Scratch.vm.runtime.audioEngine.inputNode.gain.value = 0;
-          }
-        }
-        function onFocus() {
-          if (window.isAdOpened == false) {
+        window.onfocus = () => {
+          if (!this.isAdOpened) {
             Scratch.vm.runtime.audioEngine.inputNode.gain.value = 1;
           }
-        }
-        window.onfocus = onFocus;
-        window.onblur = onBlur;
-        window.isAdOpened = false;
+        };
+        window.onblur = () => {
+          if (!this.isAdOpened) {
+            Scratch.vm.runtime.audioEngine.inputNode.gain.value = 0;
+          }
+        };
         document.addEventListener(
           "visibilitychange",
           function () {
-            if (window.isAdOpened == false) {
+            if (!this.isAdOpened) {
               if (document.hidden) {
                 Scratch.vm.runtime.audioEngine.inputNode.gain.value = 0;
               } else {
@@ -366,61 +371,49 @@ YaGames.init().then(ysdk => {
           },
           false,
         );
-        window.savedData = "";
-        if (window.ysdkdebug == true) {
-          window.ysdk = {};
-          window.ysdkplayer = {};
-          return;
-        }
+        if (this.debug) return;
         var script = document.createElement("script");
         script.src = "/sdk.js";
         document.head.appendChild(script);
         script.onload = async function () {
           console.log(YaGames);
           await YaGames.init().then((ysdk) => {
-            window.ysdk = ysdk;
+            this.ysdk = ysdk;
             ysdk.features.LoadingAPI.ready();
             ysdk
               .getPlayer({ scopes: false })
-              .then((_player) => {
-                var player = _player;
-                window.ysdkplayer = player;
-                console.log(window.ysdkplayer);
+              .then((player) => {
+                this.ysdkplayer = player;
+                console.log(this.ysdkplayer);
               })
-              .catch((err) => {});
+              .catch(() => {});
           });
-          console.log("Инициализировано YaGames!");
+          console.log("Yandex Games SDK:\nInitialized!");
         };
       }
       async loadvars() {
-        if (window.ysdkdebug != true) {
-          if (window.ysdkplayer != undefined) {
-            var data = await window.ysdkplayer.getData();
-            window.ysdkdata = data;
-            console.log("Succesfully loaded data!");
-          }
-        } else {
-          window.ysdkdata = {};
+        if (this.debug) {
+          this.ysdkdata = {};
         }
+        if (!this.ysdkplayer) return;
+        this.ysdkdata = await this.ysdkplayer.getData();
+        console.log("Yandex Games SDK:\nSuccesfully loaded data!");
       }
       setdebug() {
-        window.alreadyrated = false;
-        window.ysdkdebug = true;
+        this.debug = true;
       }
       async leaderboard(args) {
-      if (window.ysdk != true) {
-        await ysdk.getLeaderboards()
+        if (!this.ysdk) return;
+        await this.ysdk.getLeaderboards()
           .then(lb => {
             lb.setLeaderboardScore(args.NAME, args.SCORE);
-            console.log("Сохранены данные в лидерборд")
           });
       }
-      }
       sdkenabled() {
-        return window.ysdk != undefined;
+        return !!this.ysdk;
       }
       dataloaded() {
-        return window.ysdkplayer != undefined && window.ysdkdata != undefined;
+        return !!this.ysdkplayer && !!this.ysdkdata;
       }
       deafAE() {
         Scratch.vm.runtime.audioEngine.inputNode.gain.value = 0;
@@ -430,29 +423,29 @@ YaGames.init().then(ysdk => {
       }
       showfullscreen() {
         window.isfullscreenclosed = false;
-        window.isAdOpened = true;
+        this.isAdOpened = true;
         Scratch.vm.runtime.audioEngine.inputNode.gain.value = 0;
-        if (window.ysdkdebug == true) {
-          alert("Показ рекламы");
+        if (this.debug) {
+          alert("Debug mode: AD showing");
           window.isfullscreenclosed = true;
           Scratch.vm.runtime.audioEngine.inputNode.gain.value = 1;
           window.triggerIFC = true;
           window.isAdOpened = false;
           return;
         }
-        if (window.ysdk != undefined) {
-          window.ysdk.adv.showFullscreenAdv({
+        if (this.ysdk) {
+          this.ysdk.adv.showFullscreenAdv({
             callbacks: {
-              onClose: function (wasShown) {
+              onClose: function () {
                 window.isfullscreenclosed = true;
                 window.triggerIFC = true;
-                window.isAdOpened = false;
+                this.isAdOpened = false;
                 Scratch.vm.runtime.audioEngine.inputNode.gain.value = 1;
               },
-              onError: function (error) {
+              onError: function () {
                 window.isfullscreenclosed = false;
                 window.triggerIFC = true;
-                window.isAdOpened = false;
+                this.isAdOpened = false;
               },
             },
           });
@@ -461,81 +454,66 @@ YaGames.init().then(ysdk => {
       showrewarded() {
         window.isrewardedwatched = false;
         window.isrewarded = false;
-        window.isAdOpened = true;
+        this.isAdOpened = true;
         this.deafAE();
-        if (window.ysdkdebug == true) {
-          var pr = prompt(
-            "DEBUG Rewarded Ad! Write C to close it, write R to get trigger reward.",
-          );
-          if (pr.toLowerCase() == "c") {
-            window.isrewardedwatched = true;
-            window.isrewarded = false;
-          } else if (pr.toLowerCase() == "r") {
-            window.isrewardedwatched = true;
-            window.isrewarded = true;
-          }
-          window.isAdOpened = false;
+        if (this.debug) {
+          window.isrewarded = confirm("Debug mode: Reward AD showing");
+          window.isrewardedwatched = true;
+          this.isAdOpened = false;
           this.triggerIRW();
           return;
         }
-
-setdata() {
-function initPlayer() {
-    return ysdk.getPlayer().then(_player => {
-            return _player;
-        });
-}
-
-initPlayer().then(_player => {
-        if (_player.isAuthorized() === false) {
-            console.log("Игрок не авторизован")
-                    };
-        
-        if (_player.isAuthorized() === true) {
-_player.setData(
-    {[args.DATA]},
-    [args.FLASH]
-).then(() => {
-    console.log('data is set');
-})}
-}}
-
-getdata(){
-ysdk.getPlayer().then(_player => {
-return _player.getData([args.KEY]) }
-}
-
-
-        window.ysdk.adv.showRewardedVideo({
-          callbacks: {
-            onOpen: () => {
-              window.isrewardedwatched = false;
-              window.isrewarded = false;
+        if (this.ysdk) {
+          this.ysdk.adv.showRewardedVideo({
+            callbacks: {
+              onOpen: () => {
+                window.isrewardedwatched = false;
+                window.isrewarded = false;
+              },
+              onRewarded: () => {
+                window.isrewarded = true;
+                this.isAdOpened = false;
+                this.triggerIRW();
+              },
+              onClose: () => {
+                window.isrewardedwatched = true;
+                this.isAdOpened = false;
+                this.undeafAE();
+                this.triggerIRW();
+              },
+              onError: () => {
+                window.isrewardedwatched = false;
+                window.isrewarded = false;
+                this.isAdOpened = false;
+              },
             },
-            onRewarded: () => {
-              window.isrewarded = true;
-              window.isAdOpened = false;
-              this.triggerIRW();
-            },
-            onClose: () => {
-              window.isrewardedwatched = true;
-              window.isAdOpened = false;
-              this.undeafAE();
-              this.triggerIRW();
-            },
-            onError: (e) => {
-              window.isrewardedwatched = false;
-              window.isrewarded = false;
-              window.isAdOpened = false;
-            },
-          },
-        });
+          });
+        }
+      }
+      setdata() {
+        if (!this.ysdk) return;
+        function initPlayer() {
+          return this.ysdk.getPlayer().then(player => {
+            return player;
+          });
+        }
+        initPlayer().then(player => {
+          if (!player.isAuthorized()) {
+            console.error("Игрок не авторизован");
+            return;
+          };
+          player.setData(
+            {args.DATA},
+            args.FLASH
+          );
+        }
+      }
+      getdata() {
+        if (!this.ysdk) return;
+        return this.ysdk.getPlayer().then(player => {
+          return player.getData([args.KEY])
+        })
       }
     }
     Scratch.extensions.register(new YaGamesSDKExtension());
-  })(Scratch);
-
-
-
-
-
+})(Scratch);
