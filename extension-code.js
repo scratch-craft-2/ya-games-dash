@@ -504,7 +504,7 @@
         initPlayer().then(player => {
           if (!player.isAuthorized()) return;
           player.setData(data, flash);
-        }
+        });
       }
       getdata(args) {
         const key = Scratch.Cast.toString(args.KEY);
@@ -529,3 +529,4 @@
     }
     Scratch.extensions.register(new YaGamesSDKExtension());
 })(Scratch);
+
