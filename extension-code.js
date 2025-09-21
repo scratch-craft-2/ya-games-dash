@@ -50,6 +50,10 @@
               text: "server time",
             },
             "---",
+           {
+                blockType: Scratch.BlockType.LABEL,
+                text: 'Saving progress'
+            },
             {
               opcode: "setdata",
               blockType: Scratch.BlockType.COMMAND,
@@ -76,6 +80,10 @@
               }
             },
             "---",
+           {
+                blockType: Scratch.BlockType.LABEL,
+                text: 'leaderboards'
+            },
             {
               opcode: "leaderboard",
               blockType: Scratch.BlockType.COMMAND,
@@ -127,6 +135,10 @@
               text: "reset progress",
             },
             "---",
+           {
+                blockType: Scratch.BlockType.LABEL,
+                text: 'login'
+            },
             {
               opcode: "alreadyLogin",
               blockType: Scratch.BlockType.BOOLEAN,
@@ -138,6 +150,10 @@
               text: "show authorization window",
             },
             "---",
+           {
+                blockType: Scratch.BlockType.LABEL,
+                text: 'advertisement'
+            },
             {
               opcode: "showfullscreen",
               blockType: Scratch.BlockType.COMMAND,
@@ -171,6 +187,10 @@
               text: "reward for ad to be received?",
             },
             "---",
+           {
+                blockType: Scratch.BlockType.LABEL,
+                text: 'rate game'
+            },
             {
               opcode: "canRateGame",
               blockType: Scratch.BlockType.BOOLEAN,
@@ -182,6 +202,10 @@
               text: "show rate popup",
             },
             "---",
+           {
+                blockType: Scratch.BlockType.LABEL,
+                text: 'device type'
+            },
             {
               opcode: "getDeviceType",
               blockType: Scratch.BlockType.REPORTER,
@@ -529,4 +553,5 @@
     }
     Scratch.extensions.register(new YaGamesSDKExtension());
 })(Scratch);
+
 
