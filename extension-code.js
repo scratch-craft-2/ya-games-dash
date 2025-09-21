@@ -404,9 +404,11 @@
       }
       async leaderboard(args) {
         if (!this.ysdk) return;
+        const name = Scratch.Cast.toString(args.NAME);
+        const score = Scratch.Cast.toNumber(args.SCORE);
         await this.ysdk.getLeaderboards()
           .then(lb => {
-            lb.setLeaderboardScore(args.NAME, args.SCORE);
+            lb.setLeaderboardScore(name, score);
           });
       }
       sdkenabled() {
@@ -490,7 +492,9 @@
           });
         }
       }
-      setdata() {
+      setdata(args) {
+        const data = this.castToObject(args.DATA);
+        const flash = Scratch.Cast.toBoolean(args.FLASH);
         if (!this.ysdk) return;
         function initPlayer() {
           return this.ysdk.getPlayer().then(player => {
@@ -498,21 +502,29 @@
           });
         }
         initPlayer().then(player => {
-          if (!player.isAuthorized()) {
-            console.error("Игрок не авторизован");
-            return;
-          };
-          player.setData(
-            {args.DATA},
-            args.FLASH
-          );
+          if (!player.isAuthorized()) return;
+          player.setData(data, flash);
         }
       }
-      getdata() {
+      getdata(args) {
+        const key = Scratch.Cast.toString(args.KEY);
         if (!this.ysdk) return;
         return this.ysdk.getPlayer().then(player => {
-          return player.getData([args.KEY])
-        })
+          return player.getData(key)
+        });
+      }
+      castToObject(value) {
+        // Already an object?
+        if (typeof value === 'object' && value instanceof Object && !Array.isArray(value)) {
+          return value;
+        }
+        try {
+          // Try to parse
+          const result = JSON.parse(value);
+          return typeof result === 'object' && result instanceof Object && !Array.isArray(result) ? result : {};
+        } catch {
+          return {};
+        }
       }
     }
     Scratch.extensions.register(new YaGamesSDKExtension());
