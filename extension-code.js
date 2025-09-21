@@ -424,6 +424,8 @@
         console.log("Yandex Games SDK:\nSuccesfully loaded data!");
       }
       setdebug() {
+        window.alreadyrated = false;
+        window.ysdkdebug = true;
         this.debug = true;
       }
       async leaderboard(args) {
@@ -553,5 +555,6 @@
     }
     Scratch.extensions.register(new YaGamesSDKExtension());
 })(Scratch);
+
 
 
